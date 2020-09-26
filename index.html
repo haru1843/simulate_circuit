@@ -126,10 +126,14 @@ function loadTextFiles(dirName) {
     $("#top-menu .task-name").load(`./${dirName}/task_name.html`),
     $("#explain .task-title").load(`./${dirName}/task_title.html`),
     $("#explain .task-description").load(`./${dirName}/task_description.html`),
-    $.get(`./${dirName}/initial_circuit.json`, function(data){
-      console.log(data);
-      simcir.setupSimcir($(".simcir"), JSON.parse(data));
+    $.getJSON(`./${dirName}/initial_circuit.json`, function(json){
+      simcir.setupSimcir($(".simcir"), json);
     })
+    // $.get(`./${dirName}/initial_circuit.json`, function(data){
+    //   console.log(data);
+
+    //   simcir.setupSimcir($(".simcir"), JSON.parse(data));
+    // })
   ).done(function(){
     $("#load-dimmer").removeClass("active");
     $("#load-dimmer").addClass("disabled");
