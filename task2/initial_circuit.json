@@ -7,18 +7,17 @@
         {"type":"Toggle"},
         {"type":"OR"},
         {"type":"OR", "label": "3OR", "numInputs": 3},
-        {"type":"OR", "label": "4OR", "numInputs": 4},
         {"type":"AND"}, 
         {"type":"AND", "label": "3AND", "numInputs": 3},
-        {"type":"AND", "label": "4AND", "numInputs": 4},
         {"type":"EOR", "label": "XOR", "numInputs": 2},
         {"type":"NOT"},
         {"type":"7seg"}
     ],
     "devices":[
         {"type":"DC","id":"dc","x":10,"y":10,"label":"DC"},
-        {"type":"Toggle","id":"degit2","x":100,"y":110,"label":"2桁目"},
-        {"type":"Toggle","id":"degit1","x":100,"y":310,"label":"1桁目"},
+        {"type":"Toggle","id":"degit2","x":100,"y":110,"label":"3桁目"},
+        {"type":"Toggle","id":"degit2","x":100,"y":310,"label":"2桁目"},
+        {"type":"Toggle","id":"degit1","x":100,"y":510,"label":"1桁目"},
         {"type":"7seg","id":"7seg","x":500,"y":200,"label":"7seg"}
     ],
     "connectors":[
