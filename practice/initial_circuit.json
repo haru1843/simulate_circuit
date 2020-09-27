@@ -14,7 +14,7 @@
         {"type":"EOR", "label": "XOR", "numInputs": 2},
         {"type":"NOT"},
         {"type":"LED"},
-        {"type":"PushOff"},
+        {"type":"PushOn"},
         {"type":"4bit7seg"},
         {"type":"JK-FF"},
         {"type":"7seg"}

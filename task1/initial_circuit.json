@@ -15,7 +15,7 @@
         {"type":"NOT"},
         {"type":"JK-FF"},
         {"type":"LED"},
-        {"type":"PushOff"},
+        {"type":"PushOn"},
         {"type":"4bit7seg"},
         {"type":"JK-FF"}
     ],
