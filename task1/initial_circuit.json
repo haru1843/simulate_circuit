@@ -6,9 +6,18 @@
         {"type":"DC"},
         {"type":"Toggle"},
         {"type":"OR"},
-        {"type":"AND"},
+        {"type":"OR", "label": "3OR", "numInputs": 3},
+        {"type":"OR", "label": "4OR", "numInputs": 4},
+        {"type":"AND"}, 
+        {"type":"AND", "label": "3AND", "numInputs": 3},
+        {"type":"AND", "label": "4AND", "numInputs": 4},
+        {"type":"EOR", "label": "XOR", "numInputs": 2},
         {"type":"NOT"},
-        {"type":"7seg"}
+        {"type":"JK-FF"},
+        {"type":"LED"},
+        {"type":"PushOff"},
+        {"type":"4bit7seg"},
+        {"type":"JK-FF"}
     ],
     "devices":[
         {"type":"DC","id":"dc","x":10,"y":10,"label":"DC"},
