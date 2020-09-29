@@ -15,13 +15,14 @@
     ],
     "devices":[
         {"type":"DC","id":"dc","x":10,"y":10,"label":"DC"},
-        {"type":"Toggle","id":"degit2","x":100,"y":110,"label":"3桁目"},
+        {"type":"Toggle","id":"degit3","x":100,"y":110,"label":"3桁目"},
         {"type":"Toggle","id":"degit2","x":100,"y":310,"label":"2桁目"},
         {"type":"Toggle","id":"degit1","x":100,"y":510,"label":"1桁目"},
         {"type":"7seg","id":"7seg","x":500,"y":200,"label":"7seg"}
     ],
     "connectors":[
         {"from":"dc.out0","to":"degit1.in0"},
-        {"from":"dc.out0","to":"degit2.in0"}
+        {"from":"dc.out0","to":"degit2.in0"},
+        {"from":"dc.out0","to":"degit3.in0"}
     ]
 }
