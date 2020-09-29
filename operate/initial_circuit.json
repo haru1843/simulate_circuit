@@ -1,0 +1,25 @@
+{
+    "width":  2000,
+    "height":  2000,
+    "showToolbox": true,
+    "toolbox": [
+        {"type":"DC"},
+        {"type":"Toggle"},
+        {"type":"OR"},
+        {"type":"OR", "label": "3OR", "numInputs": 3},
+        {"type":"AND"}, 
+        {"type":"AND", "label": "3AND", "numInputs": 3},
+        {"type":"NOT"},
+        {"type":"EOR", "label": "XOR", "numInputs": 2},
+        {"type":"JK-FF"},
+        {"type":"PushOn"},
+        {"type":"LED"},
+        {"type":"7seg"},
+        {"type":"4bit7seg"}
+    ],
+    "devices":[
+        {"type":"DC","id":"dc","x":10,"y":10,"label":"DC"}
+    ],
+    "connectors":[
+    ]
+}
