@@ -195,27 +195,83 @@ $(function() {
   });
 
   // ダウンロードボタンクリック時の処理
+  // $("#dl-button").on('click', function() {
+  //   const text = simcir.controller($('.simcir').find(".simcir-workspace")).text();
+  //   const link = document.createElement('a');
+  //   link.href = window.URL.createObjectURL(new Blob([text]));
+  //   link.download = "circuit.json";
+  //   link.click();
+  // });
   $("#dl-button").on('click', function() {
     const text = simcir.controller($('.simcir').find(".simcir-workspace")).text();
     const link = document.createElement('a');
-    // link.href = window.URL.createObjectURL(new Blob([text]));
-    link.href = window.URL.createObjectURL(new Blob([text], {type: "application/octet-stream"}));
-    link.download = "circuit.json";
+
+    date = new Date();
+
+    let date_uint8_array = new Uint8Array(10);
+    const year = date.getFullYear();
+    date_uint8_array[0] = parseInt(year / 100);
+    date_uint8_array[1] = year % 100;
+    date_uint8_array[2] = date.getMonth() + 1;
+    date_uint8_array[3] = date.getDate();
+    date_uint8_array[4] = date.getHours();
+    date_uint8_array[5] = date.getMinutes();
+    date_uint8_array[6] = date.getSeconds();
+    const m_sec = date.getTime() % 10000;
+    date_uint8_array[7] = parseInt(m_sec / 100);
+    date_uint8_array[8] = m_sec % 100;
+    // console.log(date_uint8_array);
+
+    const text_uint8_array = (new TextEncoder('utf-8')).encode(text);
+    // console.log(text_uint8_array);
+
+    text_array_len = text_uint8_array.length
+    date_array_len = date_uint8_array.length
+    console.log(text_array_len);
+    let whole_uint8_array = new Uint8Array(date_array_len + text_array_len);
+    for (let i = 0; i < date_array_len; i++) {
+      whole_uint8_array[i] = date_uint8_array[i];
+    }
+    for (let i = 0; i < text_array_len; i++) {
+      whole_uint8_array[date_array_len + i] = text_uint8_array[i] + date_uint8_array[8];
+    }
+    // console.log(whole_uint8_array);
+    
+    link.href = window.URL.createObjectURL(new Blob([whole_uint8_array], {type: "octet/stream"}));
+    link.download = "circuit.cjb";
     link.click();
   });
 
   // アップロードボタンクリック時の処理
+  // $("#ul-input").on("change", function(){
+  //   if ($(this).val() !== '') {
+  //     const fileObj = $(this).prop("files")[0];
+  //     var reader_ = new FileReader();
+  //     // ファイル読み込み成功時のイベント
+  //     reader_.onload = function() {
+  //         simcir.setupSimcir($(".simcir"), JSON.parse(reader_.result));
+  //     }
+  //     reader_.readAsText(fileObj);
+  //   }
+  // });
   $("#ul-input").on("change", function(){
     if ($(this).val() !== '') {
       const fileObj = $(this).prop("files")[0];
       var reader_ = new FileReader();
       // ファイル読み込み成功時のイベント
       reader_.onload = function() {
-          simcir.setupSimcir($(".simcir"), JSON.parse(reader_.result));
+        date_array = new Uint8Array(reader_.result.slice(0, 9));
+        text_array = new Uint8Array(reader_.result.slice(10));
+        for (let i = 0; i < text_array.length; i++) {
+          text_array[i] -= date_array[8];
+        }
+        text = (new TextDecoder("utf-8")).decode(text_array);
+        
+        simcir.setupSimcir($(".simcir"), JSON.parse(text));
       }
-      reader_.readAsText(fileObj);
+      reader_.readAsArrayBuffer(fileObj);
     }
-  })
+  });
 });
 </script>
 <style>
