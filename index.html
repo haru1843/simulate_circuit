@@ -53,6 +53,13 @@
           <div class="description"></div>
         </div>
       </a>
+      <a class="item">
+        <i class="tag icon"></i>
+        <div class="content">
+          <div class="huge header"></div>
+          <div class="description"></div>
+        </div>
+      </a>
     </div>
 
     <!-- 上部ナビゲーションメニュー -->
@@ -129,15 +136,14 @@
   </body>
 </html>
 <script>
-simcir.registerDevice('3input_or',
-// paste here your circuit data
-);
+// simcir.registerDevice('3input_or', ""
+// );
 
-innerWidth = $(window).innerWidth()
-simcirWidth = (innerWidth < 1000 ? 1000 : innerWidth)
+// innerWidth = $(window).innerWidth()
+// simcirWidth = (innerWidth < 1000 ? 1000 : innerWidth)
 
-innerHeight = $(window).innerHeight()
-simcirHeight = (innerHeight < 1500 ? 1500 : innerHeight)
+// innerHeight = $(window).innerHeight()
+// simcirHeight = (innerHeight < 1500 ? 1500 : innerHeight)
 
 function loadTextFiles(dirName) {
   $.when(
@@ -162,7 +168,7 @@ function loadTextFiles(dirName) {
 $(function() {
   // 初期実行
   $("#simcir-container").height($(window).innerHeight() * 0.85);
-  const dirList = ["practice", "task1", "task2"];
+  const dirList = ["operate", "practice", "task1", "task2"];
   for (let i = 0; i < dirList.length; i++) {
     $(`#side-menu a:nth-of-type(${i+1}) .header`).load(`./${dirList[i]}/task_num.html`);
     $(`#side-menu a:nth-of-type(${i+1}) .description`).load(`./${dirList[i]}/task_name.html`);
@@ -176,7 +182,7 @@ $(function() {
       loadTextFiles(dirName);
     });
   }
-  loadTextFiles("practice");
+  loadTextFiles("operate");
 
   // リサイズ時の処理
   $(window).resize(function() {
@@ -192,7 +198,8 @@ $(function() {
   $("#dl-button").on('click', function() {
     const text = simcir.controller($('.simcir').find(".simcir-workspace")).text();
     const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(new Blob([text]));
+    // link.href = window.URL.createObjectURL(new Blob([text]));
+    link.href = window.URL.createObjectURL(new Blob([text], {type: "application/octet-stream"}));
     link.download = "circuit.json";
     link.click();
   });
