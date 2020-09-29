@@ -233,6 +233,15 @@ $(function() {
   }
 }
 
+span.hl {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgb(22, 22, 22);
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 4px;
+  border-radius: 4px;
+}
+
 #main-container {
   margin: 0;
   padding: 0;
@@ -252,7 +261,23 @@ $(function() {
   padding: 0;
 }
 
-#main-container>#explain {
+#main-container>#explain .task-title {
+  display: inline-block;
+  background-color: rgb(73, 73, 73);
+  color: rgb(255, 255, 255);
+  margin-bottom: 1rem;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+}
+
+#main-container>#explain .task-description .item {
+  margin: 0.8rem;
+}
+
+#main-container>#explain .task-description .header {
+  font-size: 1.2rem;
+  display: inline;
+  border-bottom: solid 2px black;;
 }
 
 #simcir-container {
