@@ -11,6 +11,8 @@
     <!-- semantic-ui -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <!-- sweet-aleart -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>circuit simulator</title>
   </head>
   <body>
@@ -280,7 +282,16 @@ $(function() {
           setSimcir(text);
         }
         catch (e) {
-          
+          // e.name
+          // e.message
+          swal({
+            title: "InputFileError!",
+            text: "選択したファイルに誤りがあります\n違うファイルを選択してください",
+            icon: "error",
+            button: {
+              text: "OK"
+            }
+          });
         }
         // simcir.setupSimcir($(".simcir"), JSON.parse(text));
       }
