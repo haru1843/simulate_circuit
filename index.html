@@ -136,6 +136,15 @@
   </body>
 </html>
 <script>
+function setSimcir(json_text) {
+  var structure = JSON.parse(simcir.controller($('.simcir').find(".simcir-workspace")).text());
+  const setStructure = JSON.parse(json_text);
+
+  structure.devices = setStructure.devices
+  structure.connectors = setStructure.connectors
+  
+  simcir.setupSimcir($(".simcir"), structure);
+}
 // simcir.registerDevice('3input_or', ""
 // );
 
@@ -267,7 +276,13 @@ $(function() {
         }
         text = (new TextDecoder("utf-8")).decode(text_array);
         
-        simcir.setupSimcir($(".simcir"), JSON.parse(text));
+        try {
+          setSimcir(text);
+        }
+        catch (e) {
+          
+        }
+        // simcir.setupSimcir($(".simcir"), JSON.parse(text));
       }
       reader_.readAsArrayBuffer(fileObj);
     }
