@@ -147,6 +147,36 @@ function setSimcir(json_text) {
   
   simcir.setupSimcir($(".simcir"), structure);
 }
+
+// 初期&ページ遷移時に実行するもの
+function update() {
+  $(".img-container").on({
+    "mouseenter": function(){
+      $(".img-container>i.icon").addClass("hover");
+    },
+    "mouseleave": function(){
+      $(".img-container>i.icon").removeClass("hover");
+    },
+    "click": function(){
+      $.when(
+        $(".img-container>i.icon").css("opacity", 0),
+        $(".img-container>#inout-img").attr({
+          'src': $(".img-container>#inout-img").attr('src').replace('init.jpg', 'animate.gif')
+        }),
+        $(".img-container>#inout-img").css("opacity", 1),
+      ).done(
+        setTimeout(function(){
+          $(".img-container>#inout-img").attr({
+            'src': $(".img-container>#inout-img").attr('src').replace('animate.gif', 'init.jpg')
+          });
+        $(".img-container>#inout-img").css("opacity", 0.3);
+        $(".img-container>i.icon").css("opacity", 1);
+        }, $(".img-container>#inout-img").attr('stopTime'))
+      );
+    },
+  });
+}
+
 // simcir.registerDevice('3input_or', ""
 // );
 
@@ -173,7 +203,8 @@ function loadTextFiles(dirName) {
   ).done(function(){
     $("#load-dimmer").removeClass("active");
     $("#load-dimmer").addClass("disabled");
-  })
+    update();
+  });
 };
 
 $(function() {
@@ -300,6 +331,8 @@ $(function() {
       reader_.readAsArrayBuffer(fileObj);
     }
   });
+
+  update();
 });
 </script>
 <style>
@@ -394,8 +427,10 @@ input[type=file] {
 }
 
 .img-container {
-  padding-top: 0.5rem;
-  padding-bottom: 1.5rem;
+  display: inline-block;
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .img-container>#segment-img{
@@ -412,6 +447,47 @@ input[type=file] {
   border-style: solid;
   border-radius: 1rem;
 }
+
+.img-container>#inout-img {
+  width: 25rem;
+  cursor: pointer;
+  border: 2px solid rgb(73, 73, 73);
+  border-radius: 1rem;
+  opacity: 0.3;
+}
+
+.img-container>i {
+  cursor: pointer;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;
+  padding:0;
+  color: rgba(80, 80, 80);
+  font-size: 6rem;
+  transition: 200ms;
+}
+
+.img-container>i.hover {
+  color: rgba(100, 100, 100);
+  font-size: 5rem;
+}
+
+.img-container>i::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;
+  padding:0;
+}
+
 
 .ic-white {
   color: rgb(230, 230, 230);
