@@ -159,7 +159,8 @@ function update() {
     },
     "click": function(){
       $.when(
-        $(".img-container>i.icon").css("opacity", 0),
+        $(".img-container>i.icon").removeClass("hover"),
+        $(".img-container>i.icon").hide(500),
         $(".img-container>#inout-img").attr({
           'src': $(".img-container>#inout-img").attr('src').replace('init.jpg', 'animate.gif')
         }),
@@ -169,8 +170,9 @@ function update() {
           $(".img-container>#inout-img").attr({
             'src': $(".img-container>#inout-img").attr('src').replace('animate.gif', 'init.jpg')
           });
-        $(".img-container>#inout-img").css("opacity", 0.3);
-        $(".img-container>i.icon").css("opacity", 1);
+          $(".img-container>#inout-img").css("opacity", 0.3);
+          $(".img-container>i.icon").css("opacity", 1);
+          $(".img-container>i.icon").show(500);
         }, $(".img-container>#inout-img").attr('stopTime'))
       );
     },
