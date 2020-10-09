@@ -13,6 +13,13 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <!-- sweet-aleart -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- link for preload -->
+      <link rel="preload" href="./img/segment.png" as="image">
+      <link rel="preload" href="./img/each_num_segments_.png" as="image">
+      <link rel="preload" href="./img/in_out/01/animate.gif" as="image">
+      <link rel="preload" href="./img/in_out/01/init.jpg" as="image">
+      <link rel="preload" href="./img/in_out/02/animate.gif" as="image">
+      <link rel="preload" href="./img/in_out/02/init.jpg" as="image">
     <title>circuit simulator</title>
   </head>
   <body>
@@ -203,9 +210,10 @@ function loadTextFiles(dirName) {
     //   simcir.setupSimcir($(".simcir"), JSON.parse(data));
     // })
   ).done(function(){
+    update();
+
     $("#load-dimmer").removeClass("active");
     $("#load-dimmer").addClass("disabled");
-    update();
   });
 };
 
