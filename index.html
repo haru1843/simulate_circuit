@@ -342,6 +342,11 @@ $(function() {
     }
   });
 
+  // 同一ファイル再アップロード時の対策
+  $("#ul-input").on("click", function(){
+    $(this).val('');
+  });
+
   update();
 });
 </script>
