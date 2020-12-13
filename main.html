@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js'></script>
+    <script type="text/javascript" src="simcir.js"></script>
+    <link rel="stylesheet" type="text/css" href="simcir.css" />
+    <script type="text/javascript" src="simcir-basicset.js"></script>
+    <link rel="stylesheet" type="text/css" href="simcir-basicset.css" />
+    <script type="text/javascript" src="simcir-library.js"></script>
+    <!-- semantic-ui -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <!-- sweet-aleart -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- link for preload -->
+      <link rel="preload" href="./img/segment.png" as="image">
+      <link rel="preload" href="./img/each_num_segments_.png" as="image">
+      <link rel="preload" href="./img/in_out/01/animate.gif" as="image">
+      <link rel="preload" href="./img/in_out/01/init.jpg" as="image">
+      <link rel="preload" href="./img/in_out/02/animate.gif" as="image">
+      <link rel="preload" href="./img/in_out/02/init.jpg" as="image">
+    <title>circuit simulator</title>
+  </head>
+  <body>
+
+    <!-- ローディング画面 -->
+    <div class="ui active dimmer" id="load-dimmer">
+      <div class="ui massive text loader">
+        <h3>Loading</h3>
+      </div>
+    </div>
+
+    <!-- サイドバーメニュー -->
+    <div class="ui left sidebar inverted vertical menu" id="side-menu">
+      <div class="item" style="text-align: center;">
+         <h2 class="ui icon header">
+            <i class="ic-white tasks icon"></i>
+            <div class="ic-white content">
+                tasks
+            </div>
+        </h2>
+      </div>
+      <a class="item">
+        <i class="tag icon"></i>
+        <div class="content">
+          <div class="huge header"></div>
+          <div class="description"></div>
+        </div>
+      </a>
+      <a class="item">
+        <i class="tag icon"></i>
+        <div class="content">
+          <div class="huge header"></div>
+          <div class="description"></div>
+        </div>
+      </a>
+      <a class="item">
+        <i class="tag icon"></i>
+        <div class="content">
+          <div class="huge header"></div>
+          <div class="description"></div>
+        </div>
+      </a>
+      <a class="item">
+        <i class="tag icon"></i>
+        <div class="content">
+          <div class="huge header"></div>
+          <div class="description"></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 上部ナビゲーションメニュー -->
+    <div class="ui fixed inverted menu" id="top-menu">
+      <div class="menu">
+        <div id="js-sidebar" class="item">
+          <i class="icon large grey content"></i>
+        </div>
+        <div class="item task-num">
+        </div>
+        <div class="item task-name">
+        </div>
+      </div>
+      <a class="right item" href="https://nu-nishimori-lab.netlify.app/">新潟大学 西森研究室</a>
+    </div>
+
+    <!-- コンテンツ本体 -->
+    <div class="pusher" id="main-container">
+
+      <!-- 課題の内容 -->
+      <div class="ui vertical segment" id="explain">
+        <div class="paragraph">
+          <div class="ui large header task-title"></div>
+          <div class="content task-description"></div>
+        </div>
+      </div>
+
+
+      <!-- 回路の構成のダウンロード/アップロード -->
+      <div class="ui center aligned vertical segment">
+        <button class="ui labeled icon button" id="dl-button" tabindex="0">
+          <i class="download icon"></i>
+          回路構成をダウンロード
+        </button>
+        <div class="ui input">
+          <input type="file" id="ul-input">
+          <label for="ul-input" class="ui labeled icon button">
+            <i class="ui upload icon"></i>
+            回路構成をセット
+          </label>
+      </div>
+
+      <!-- 回路 -->
+      <div class="ui vertical segment" id="simcir-container">
+        <div class="simcir">
+          {
+            "width": 2000,
+            "height": 2000
+          }
+        <!-- paste here your circuit data -->
+        </div>
+      </div>
+    </div>
+
+    <!-- フッタ− -->
+    <div class="ui inverted vertical footer segment" id="footer-container">
+      <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        <div>
+          <i class="ui rss large icon"></i>
+          Nishimori lab
+        </div>
+        <!-- <img src="assets/images/logo.png" class="ui centered mini image"> -->
+        <div class="ui horizontal inverted small divided link list">
+          <a class="item" href="https://nu-nishimori-lab.netlify.app/">Homepage</a>
+          <a class="item" href="https://nu-nishimori-lab.netlify.app/lab/contents">Studies</a>
+          <a class="item" href="https://nu-nishimori-lab.netlify.app/faq">FAQ</a>
+          <!-- <a class="item" href="#">Terms and Conditions</a>
+          <a class="item" href="#">Privacy Policy</a> -->
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>
+<script>
+function setSimcir(json_text) {
+  var structure = JSON.parse(simcir.controller($('.simcir').find(".simcir-workspace")).text());
+  const setStructure = JSON.parse(json_text);
+
+  structure.devices = setStructure.devices
+  structure.connectors = setStructure.connectors
+  
+  simcir.setupSimcir($(".simcir"), structure);
+}
+
+// 初期&ページ遷移時に実行するもの
+function update() {
+  $(".img-container").on({
+    "mouseenter": function(){
+      $(".img-container>i.icon").addClass("hover");
+    },
+    "mouseleave": function(){
+      $(".img-container>i.icon").removeClass("hover");
+    },
+    "click": function(){
+      $.when(
+        $(".img-container>i.icon").removeClass("hover"),
+        $(".img-container>i.icon").hide(500),
+        $(".img-container>#inout-img").attr({
+          'src': $(".img-container>#inout-img").attr('src').replace('init.jpg', 'animate.gif')
+        }),
+        $(".img-container>#inout-img").css("opacity", 1),
+      ).done(
+        setTimeout(function(){
+          $(".img-container>#inout-img").attr({
+            'src': $(".img-container>#inout-img").attr('src').replace('animate.gif', 'init.jpg')
+          });
+          $(".img-container>#inout-img").css("opacity", 0.3);
+          $(".img-container>i.icon").css("opacity", 1);
+          $(".img-container>i.icon").show(500);
+        }, $(".img-container>#inout-img").attr('stopTime'))
+      );
+    },
+  });
+}
+
+// simcir.registerDevice('3input_or', ""
+// );
+
+// innerWidth = $(window).innerWidth()
+// simcirWidth = (innerWidth < 1000 ? 1000 : innerWidth)
+
+// innerHeight = $(window).innerHeight()
+// simcirHeight = (innerHeight < 1500 ? 1500 : innerHeight)
+
+function loadTextFiles(dirName) {
+  $.when(
+    $("#top-menu .task-num").load(`./${dirName}/task_num.html`),
+    $("#top-menu .task-name").load(`./${dirName}/task_name.html`),
+    $("#explain .task-title").load(`./${dirName}/task_title.html`),
+    $("#explain .task-description").load(`./${dirName}/task_description.html`),
+    $.getJSON(`./${dirName}/initial_circuit.json`, function(json){
+      simcir.setupSimcir($(".simcir"), json);
+    })
+    // $.get(`./${dirName}/initial_circuit.json`, function(data){
+    //   console.log(data);
+
+    //   simcir.setupSimcir($(".simcir"), JSON.parse(data));
+    // })
+  ).done(function(){
+    update();
+
+    $("#load-dimmer").removeClass("active");
+    $("#load-dimmer").addClass("disabled");
+  });
+};
+
+$(function() {
+  // 初期実行
+  $("#simcir-container").height($(window).innerHeight() * 0.85);
+  const dirList = ["operate", "practice", "task1", "task2"];
+  for (let i = 0; i < dirList.length; i++) {
+    $(`#side-menu a:nth-of-type(${i+1}) .header`).load(`./${dirList[i]}/task_num.html`);
+    $(`#side-menu a:nth-of-type(${i+1}) .description`).load(`./${dirList[i]}/task_name.html`);
+    $(`#side-menu a:nth-of-type(${i+1})`).attr("dirName", dirList[i]);
+
+    $(`#side-menu a:nth-of-type(${i+1})`).on('click', function() {
+      $("#load-dimmer").removeClass("disabled");
+      $("#load-dimmer").addClass("active");
+      dirName = $(this).attr("dirName");
+      $('.ui.sidebar').sidebar('toggle');
+      $( 'html,body' ).animate( {scrollTop:0} , 700);
+      loadTextFiles(dirName);
+    });
+  }
+  loadTextFiles("operate");
+  $( 'html,body' ).animate( {scrollTop:0} , 0);
+
+  // リサイズ時の処理
+  $(window).resize(function() {
+    $("#simcir-container").height($(window).innerHeight() * 0.85);
+  });
+  
+  // メニューボタンクリック時の処理
+  $('#js-sidebar').click(function() {
+    $('.ui.sidebar').sidebar('toggle');
+  });
+
+  // ダウンロードボタンクリック時の処理
+  // $("#dl-button").on('click', function() {
+  //   const text = simcir.controller($('.simcir').find(".simcir-workspace")).text();
+  //   const link = document.createElement('a');
+  //   link.href = window.URL.createObjectURL(new Blob([text]));
+  //   link.download = "circuit.json";
+  //   link.click();
+  // });
+  $("#dl-button").on('click', function() {
+    const text = simcir.controller($('.simcir').find(".simcir-workspace")).text();
+    const link = document.createElement('a');
+
+    date = new Date();
+
+    let date_uint8_array = new Uint8Array(10);
+    const year = date.getFullYear();
+    date_uint8_array[0] = parseInt(year / 100);
+    date_uint8_array[1] = year % 100;
+    date_uint8_array[2] = date.getMonth() + 1;
+    date_uint8_array[3] = date.getDate();
+    date_uint8_array[4] = date.getHours();
+    date_uint8_array[5] = date.getMinutes();
+    date_uint8_array[6] = date.getSeconds();
+    const m_sec = date.getTime() % 10000;
+    date_uint8_array[7] = parseInt(m_sec / 100);
+    date_uint8_array[8] = m_sec % 100;
+    // console.log(date_uint8_array);
+
+    const text_uint8_array = (new TextEncoder('utf-8')).encode(text);
+    // console.log(text_uint8_array);
+
+    text_array_len = text_uint8_array.length
+    date_array_len = date_uint8_array.length
+    console.log(text_array_len);
+    let whole_uint8_array = new Uint8Array(date_array_len + text_array_len);
+    for (let i = 0; i < date_array_len; i++) {
+      whole_uint8_array[i] = date_uint8_array[i];
+    }
+    for (let i = 0; i < text_array_len; i++) {
+      whole_uint8_array[date_array_len + i] = text_uint8_array[i] + date_uint8_array[8];
+    }
+    // console.log(whole_uint8_array);
+    
+    link.href = window.URL.createObjectURL(new Blob([whole_uint8_array], {type: "octet/stream"}));
+    link.download = "circuit.cjb";
+    link.click();
+  });
+
+  // アップロードボタンクリック時の処理
+  // $("#ul-input").on("change", function(){
+  //   if ($(this).val() !== '') {
+  //     const fileObj = $(this).prop("files")[0];
+  //     var reader_ = new FileReader();
+  //     // ファイル読み込み成功時のイベント
+  //     reader_.onload = function() {
+  //         simcir.setupSimcir($(".simcir"), JSON.parse(reader_.result));
+  //     }
+  //     reader_.readAsText(fileObj);
+  //   }
+  // });
+  $("#ul-input").on("change", function(){
+    if ($(this).val() !== '') {
+      const fileObj = $(this).prop("files")[0];
+      var reader_ = new FileReader();
+      // ファイル読み込み成功時のイベント
+      reader_.onload = function() {
+        date_array = new Uint8Array(reader_.result.slice(0, 9));
+        text_array = new Uint8Array(reader_.result.slice(10));
+        for (let i = 0; i < text_array.length; i++) {
+          text_array[i] -= date_array[8];
+        }
+        text = (new TextDecoder("utf-8")).decode(text_array);
+        
+        try {
+          setSimcir(text);
+        }
+        catch (e) {
+          // e.name
+          // e.message
+          swal({
+            title: "InputFileError!",
+            text: "選択したファイルに誤りがあります\n違うファイルを選択してください",
+            icon: "error",
+            button: {
+              text: "OK"
+            }
+          });
+        }
+        // simcir.setupSimcir($(".simcir"), JSON.parse(text));
+      }
+      reader_.readAsArrayBuffer(fileObj);
+    }
+  });
+
+  // 同一ファイル再アップロード時の対策
+  $("#ul-input").on("click", function(){
+    $(this).val('');
+  });
+
+  update();
+});
+</script>
+<style>
+@media screen and (min-width:480px) { 
+  html {
+    font-size: 24px;
+  }
+}
+@media screen and (min-width:768px) and ( max-width:1024px) {
+  html {
+    font-size: 21px;
+  }
+}
+@media screen and (min-width:1024px) and ( max-width:1224px) {
+  html {
+    font-size: 18px;
+  }
+}
+@media screen and (min-width:1224px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+span.hl {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgb(22, 22, 22);
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+div#js-sidebar {
+  cursor: pointer;
+}
+
+#main-container {
+  margin: 0;
+  padding: 0;
+  /* padding: 70px 3% 2%; */
+}
+
+#main-container>div {
+  /* margin: 0 3%; */
+}
+
+#main-container>div:first-child {
+  margin-top: 6rem;
+  padding: 0 3% 3rem;
+}
+
+#footer-container {
+  padding: 0;
+}
+
+i.icon {
+  padding: 0;
+}
+
+#main-container>#explain .task-title {
+  display: inline-block;
+  background-color: rgb(73, 73, 73);
+  color: rgb(255, 255, 255);
+  margin-bottom: 1rem;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+}
+
+#main-container>#explain .task-description .item {
+  margin: 0.8rem;
+}
+
+#main-container>#explain .task-description .header {
+  font-size: 1.2rem;
+  display: inline;
+  border-bottom: solid 2px black;;
+}
+
+#simcir-container {
+  overflow: scroll;
+  margin: 0 3% 3rem;
+}
+
+body.pushable>.pusher {
+  background: #fff;
+}
+
+input[type=file] { 
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.img-container {
+  display: inline-block;
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.img-container>#segment-img{
+  width: 20rem;
+  border: 2px rgb(73, 73, 73);
+  border-style: solid;
+  border-radius: 1rem;
+}
+
+.img-container>#each-segment-img{
+  width: 20rem;
+  padding: 1rem;
+  border: 2px rgb(73, 73, 73);
+  border-style: solid;
+  border-radius: 1rem;
+}
+
+.img-container>#inout-img {
+  width: 25rem;
+  cursor: pointer;
+  border: 2px solid rgb(73, 73, 73);
+  border-radius: 1rem;
+  opacity: 0.3;
+}
+
+.img-container>i {
+  cursor: pointer;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;
+  padding:0;
+  color: rgba(80, 80, 80);
+  font-size: 6rem;
+  transition: 200ms;
+}
+
+.img-container>i.hover {
+  color: rgba(100, 100, 100);
+  font-size: 5rem;
+}
+
+.img-container>i::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;
+  padding:0;
+}
+
+
+.ic-white {
+  color: rgb(230, 230, 230);
+}
+
+/* alert */
+.swal-text {
+  display: block;
+  margin: 1rem 1rem 0;
+  padding: 1rem;
+  
+  border: 2px solid #F0E1A1;
+  border-radius: .5rem;
+  
+  background-color: #FEFAE3;
+
+  text-align: center;
+  font-size: 0.9rem;
+  color: #443732;
+}
+.swal-button {
+  padding: .3rem 1rem;
+  border-radius: .3rem;
+  background-color: #4962B3;
+  font-size: 1.1rem;
+  border: 1px solid #3e549a;
+}
+.swal-button:not([disabled]):hover {
+  background-color: #3a5099;
+}
+</style>
