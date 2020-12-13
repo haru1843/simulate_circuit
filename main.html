@@ -235,7 +235,13 @@ $(function() {
       loadTextFiles(dirName);
     });
   }
-  loadTextFiles("operate");
+  let queryStr = location.search;
+  let query = [...new URLSearchParams(queryStr).entries()].reduce((obj, e) => ({...obj, [e[0]]: e[1]}), {});
+
+  let targetDir = (Object.keys(query).indexOf('dir') !== -1 ? query['dir'] : "operate");
+  targetDir = (dirList.indexOf(targetDir) !== -1 ? targetDir : "operate");
+
+  loadTextFiles(targetDir);
   $( 'html,body' ).animate( {scrollTop:0} , 0);
 
   // リサイズ時の処理
