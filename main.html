@@ -235,6 +235,8 @@ $(function() {
       loadTextFiles(dirName);
     });
   }
+
+  // クエリパラメータによるセクションの選択
   let queryStr = location.search;
   let query = [...new URLSearchParams(queryStr).entries()].reduce((obj, e) => ({...obj, [e[0]]: e[1]}), {});
 
